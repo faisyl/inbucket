@@ -1,7 +1,7 @@
 # Docker build file for Inbucket, see https://www.docker.io/
 # Inbucket website: http://www.inbucket.org/
 
-FROM golang:1.7-alpine
+FROM golang:1.9-alpine
 MAINTAINER James Hillyerd, @jameshillyerd
 
 # Configuration (WORKDIR doesn't support env vars)
@@ -19,6 +19,8 @@ EXPOSE 10025 10080 10110
 # NOTE /con/context is also used, not exposed by default
 VOLUME /con/configuration
 VOLUME /con/data
+ADD stunnel.conf /etc/stunnel/stunnel.conf
+RUN apk --update upgrade && apk add stunnel && rm -rf /var/cache/apk/*
 
 # Build Inbucket
 COPY . $INBUCKET_SRC/
